@@ -11,5 +11,5 @@ if __name__ == "__main__":
     print("Body Response:")
     print("\t- type: {}".format(type(req.text)))
     print("\t- content: {}".format(req.text))
-# text is associated with response obj getting content
+# text is associated with response obj getting contents
 # of the response as a string
