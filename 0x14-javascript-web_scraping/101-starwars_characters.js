@@ -1,29 +1,31 @@
 #!/usr/bin/node
+
 const request = require('request');
+const url = 'http://swapi.co/api/films/';
+let id = parseInt(process.argv[2], 10);
+let characters = [];
 
-const movieId = process.argv[2];
-
-if (!movieId) {
-  console.log('Movie ID as the first argument please.');
-  process.exit(1);
-}
-
-const swapiUrl = `https://swapi.dev/api/films/${movieId}/`;
-
-request(swapiUrl, (error, response, body) => {
-  if (!error && response.statusCode === 200) {
-    const filmData = JSON.parse(body);
-    filmData.characters.forEach((characterUrl) => {
-      request(characterUrl, (charError, charResponse, charBody) => {
-        if (!charError && charResponse.statusCode === 200) {
-          const characterData = JSON.parse(charBody);
-          console.log(characterData.name);
-        } else {
-          console.error(`Error fetching character: ${characterUrl}`);
+request(url, function (error, response, body) {
+  if (!error) {
+    const data = JSON.parse(body);
+    const result = data.results;
+    if (id < 4) {
+      id += 3;
+    } else {
+      id -= 3;
+    }
+    for (let p = 0; p < result.length; p++) {
+      if (result[p].episode_id === id) {
+        characters = result[p].characters;
+        break;
+      }
+    }
+    for (let k = 0; k < characters.length; k++) {
+      request(characters[k], function (error, response, body) {
+        if (error == null) {
+          console.log(JSON.parse(body).name);
         }
       });
-    });
-  } else {
-    console.error(`Error fetching movie data for Movie ID: ${movieId}`);
+    }
   }
 });
