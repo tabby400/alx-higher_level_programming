@@ -10,8 +10,13 @@ request(url, (error, response, body) => {
   } else {
     const films = JSON.parse(body).results;
 
-    const wedgeAnt = films.filter(film => film.characters.includes('https://swapi-api.alx-tools.com/api/people/18/'));
-    const filmnum = wedgeAnt.length; // no of films matching are counted
+    const filmnum = films.reduce((count, film) => {
+      if (film.characters.some(character => character.endsWith('/18/'))) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
+
     console.log(filmnum);
   }
 });
