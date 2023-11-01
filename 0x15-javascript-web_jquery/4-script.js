@@ -1,4 +1,4 @@
 
-$('DIV#toggle_header').click(()=>{
+$('div#toggle_header').click(()=>{
     $('HEADER').toggleClass('green red');
 });
